@@ -1,6 +1,7 @@
-from flask import jsonify
+from flask import jsonify, request
 from flask_web3 import current_web3
 from app import app
+from app.bdmanager.model import Order
 
 @app.route('/')
 def hello_world():
@@ -29,3 +30,11 @@ def hello_world():
     amount = token.functions.balance('0x554e1F37Bb03903Dd1eA7eFe9DC1dD9a160C6Ba5').call()
     print(amount)
     return jsonify({'data': amount})
+
+@app.route('/new_order', methods=['POST', 'GET'])
+def new_order():
+    data = request.json
+    order = Order(data['buyer'], data['seller'], data['service'], data['order'])
+
+
+

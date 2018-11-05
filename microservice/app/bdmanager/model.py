@@ -10,3 +10,9 @@ class Order(psqldb.Model):
     seller_id = psqldb.Column(psqldb.BigInteger, nullable=False)
     service_id = psqldb.Column(psqldb.BigInteger, nullable=False)
     order_state = psqldb.Column(psqldb.Integer)
+
+    def __init__(self, buyer_id, seller_id, service_id, order_state):
+        self.buyer_id = buyer_id
+        self.seller_id = seller_id
+        self.service_id = service_id
+        self.order_state = order_state
