@@ -1,7 +1,7 @@
 from flask import jsonify, request
 from flask_web3 import current_web3
 from app import app
-from app.bdmanager.model import Order
+from app.bdmanager import ordermanager
 
 @app.route('/')
 def hello_world():
@@ -34,7 +34,10 @@ def hello_world():
 @app.route('/new_order', methods=['POST', 'GET'])
 def new_order():
     data = request.json
-    order = Order(data['buyer'], data['seller'], data['service'], data['order'])
+    print(data['buyer'], data['seller'], data['service'], end=" ")
+    ordermanager.insert_order(str(data['buyer']), str(data['seller']), int(data['service']))
+    return "ok"
+
 
 
 
