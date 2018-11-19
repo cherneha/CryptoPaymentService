@@ -15,5 +15,7 @@ def insert_order(buyer, seller, service):
         psqldb.session.commit()
     except Exception as e:
         print(e)
+        print("Error while commiting to DB.")
         return False
     return True
+

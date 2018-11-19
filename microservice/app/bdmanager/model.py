@@ -13,7 +13,7 @@ class Order(psqldb.Model):
 
 
     def __init__(self, buyer_id, seller_id, service_id, order_state):
-        self.buyer_id = buyer_id
-        self.seller_id = seller_id
-        self.service_id = service_id
+        self.buyer = buyer_id
+        self.seller = seller_id
+        self.service = service_id
         self.order_state = order_state
