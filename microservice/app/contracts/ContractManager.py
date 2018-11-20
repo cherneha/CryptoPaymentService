@@ -29,4 +29,5 @@ class TokenManager:
             'gas': 21000,
             'gas_price': 1,
         }
-        self.token.functions.approve(spender=spender, tokens=value).transact(transact_params)
+        tx_hash = self.token.functions.approve(spender=spender, tokens=value).transact(transact_params)
+        current_web3.eth.waitForTransactionReceipt(tx_hash)
