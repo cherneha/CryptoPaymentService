@@ -1,4 +1,4 @@
-pragma solidity ^0.4.0;
+pragma solidity ^0.5.0;
 contract Milo{
     address owner;
     mapping (address => uint) public balances;
@@ -19,7 +19,7 @@ contract Milo{
     
     function transferFrom(address from, address to, uint tokens) public returns (bool success){
         success = false;
-        require(0x0 != to, "You do not want to send to 0 address!");
+        
         require(balances[from] >= tokens, "Not enough MILO");
         require(allowed[from][to] >= tokens, "Not allowed to transfer this amount");
         allowed[from][to] = allowed[from][to] - tokens;
@@ -35,7 +35,7 @@ contract Milo{
     
     function transfer(address to, uint tokens) public returns (bool success){
         success = false;
-        require(0x0 != to, "You do not want to send to 0 address!");
+        
         require(balances[msg.sender] >= tokens, "Not enough MILO");
         balances[msg.sender] = balances[msg.sender] - tokens;
         balances[to] = balances[to] + tokens;
@@ -46,7 +46,7 @@ contract Milo{
         allowed[msg.sender][spender] = allowed[msg.sender][spender] + tokens;
         return true;
     }
-    function allowance(address tokenOwner, address spender) public constant returns (uint remaining){
+    function allowance(address tokenOwner, address spender) public view returns (uint remaining){
         return allowed[tokenOwner][spender];
     }
 }

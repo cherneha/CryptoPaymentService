@@ -24,10 +24,18 @@ class TokenManager:
         self.token =  current_web3.eth.contract(abi=self.abi, address=self.token_adress)
 
     def approve(self, sender, spender, value):
-        transact_params = {
+        tx = self.token.functions.approve(spender=spender, tokens=value).buildTransaction(
+        {
             'from': sender,
-            'gas': 21000,
-            'gas_price': 1,
-        }
-        tx_hash = self.token.functions.approve(spender=spender, tokens=value).transact(transact_params)
-        current_web3.eth.waitForTransactionReceipt(tx_hash)
+            'gas': 6100000,
+            'value': 0,
+            'gasPrice': current_web3.eth.gasPrice * 20,  # Get Gas Price
+            'nonce': current_web3.eth.getTransactionCount(sender)
+        })
+
+        signed = current_web3.eth.account.signTransaction(tx,
+                                                          'd0eaed9b1a4633b358208793a96aba7fd42547472682a2e6fe73cf3ababef3fc')
+        tx_hash = current_web3.eth.sendRawTransaction(signed.rawTransaction)
+        print(tx_hash.hex())
+        tx_reciept = current_web3.eth.waitForTransactionReceipt(tx_hash)
+        print(tx_reciept)

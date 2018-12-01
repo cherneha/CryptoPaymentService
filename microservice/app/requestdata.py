@@ -11,4 +11,4 @@ def get_buyer_seller_address(buyer_id, seller_id):
     res_json = r.json()
     seller_address = res_json['walletAddress']
     # return buyer_address, seller_address
-    return "0x554e1F37Bb03903Dd1eA7eFe9DC1dD9a160C6Ba5", "0x2Cd8938a50AC96d4e8967f83905Bb94902073AB1"
+    return "0x2Cd8938a50AC96d4e8967f83905Bb94902073AB1", "0x8a5587F2A4B130eCf7A3c3bc1578cd6C88a51cf2"

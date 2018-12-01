@@ -10,6 +10,7 @@ class Order(psqldb.Model):
     service = psqldb.Column(psqldb.BigInteger, nullable=False)
     order_state = psqldb.Column(psqldb.Integer)
     order_date = psqldb.Column(psqldb.DateTime, default=psqldb.func.now(), nullable=False)
+    contract_adress = psqldb.Column(psqldb.String, nullable=True)
 
 
     def __init__(self, buyer_id, seller_id, service_id, order_state):
