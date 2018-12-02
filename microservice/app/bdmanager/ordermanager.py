@@ -60,9 +60,10 @@ def get_contract_address(order_id):
     return res.contract_adress
 
 
-def get_order_state(order_id):
+def get_data_to_confirm(order_id, sender):
     res = Order.query.filter_by(id=order_id).first()
-    return res.order_state
+    return res.order_state, res[sender], res.contract_adress
+
 
 def set_order_state(order_id, new_state):
     res = Order.query.filter_by(id=order_id).first()
