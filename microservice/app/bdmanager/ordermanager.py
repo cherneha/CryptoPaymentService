@@ -32,26 +32,28 @@ def add_contract_address(address, id):
 def get_buyer_orders(buyer_id):
     res = Order.query.filter_by(buyer=buyer_id)
     res_json = {}
-    res_json['orders'] = []
+    all_orders = list()
     for r in res:
         order = {}
         order['id'] = r.service
-        order['date'] = r.date
+        order['order_date'] = r.order_date
         order['order_state'] = r.order_state
         order['seller_id'] = r.seller
-        res_json['orders'] = res_json['orders'].append(order)
+        all_orders.append(order)
+    res_json['orders'] = all_orders
     print(res_json)
     return res_json
 
 def get_seller_orders(seller_id, service_id):
     res = Order.query.filter_by(seller=seller_id, service=service_id)
     res_json = {}
-    res_json['orders'] = []
+    all_orders = list()
     for r in res:
         order = {}
         order['buyer'] = r.buyer
-        order['date'] = r.date
-        res_json['orders'] = res_json['orders'].append(order)
+        order['order_date'] = r.order_date
+        all_orders.append(order)
+    res_json['orders'] = all_orders
     print(res_json)
     return res_json
 

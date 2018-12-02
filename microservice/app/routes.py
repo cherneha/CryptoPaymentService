@@ -6,7 +6,6 @@ from app import requestdata as req
 from flask_web3 import current_web3
 
 order_contract_manager = ordercontract.OrderManager()
-token_contract = tokencontract.TokenContract()
 
 @app.route('/')
 def hello_world():
@@ -14,6 +13,7 @@ def hello_world():
 
 @app.route('/new_order', methods=['POST', 'GET'])
 def new_order():
+    token_contract = tokencontract.TokenContract()
     data = request.json
     print(int(data['buyer']), int(data['seller']), int(data['service']), end=" ")
     order_id = ordermanager.insert_order(int(data['buyer']), int(data['seller']), int(data['service']))
@@ -45,8 +45,8 @@ def get_buyer_orders(id):
 
 @app.route('/get_seller_orders/', methods=['GET'])
 def get_seller_orders():
-    seller_id = request.args.get(int('seller_id'))
-    service_id = request.args.get(int('service_id'))
+    seller_id = int(request.args.get('seller_id'))
+    service_id = int(request.args.get('service_id'))
     orders = ordermanager.get_seller_orders(seller_id, service_id)
     return jsonify(orders)
 
@@ -85,8 +85,10 @@ def confirm_recieved():
     print("new order state = ", new_order_state)
     return str(new_order_state)
 
-@app.route('/balance/<id>', methods=['GET'])
-def balance(id):
-    address = req.get_user_address(int(id))
+@app.route('/balance', methods=['GET'])
+def balance():
+    token_contract = tokencontract.TokenContract()
+    id = request.args.get('id')
+    address = req.get_user_address(id)
     milo_balance = token_contract.balance(address)
-    return milo_balance
+    return str(milo_balance)

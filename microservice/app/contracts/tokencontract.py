@@ -29,4 +29,3 @@ class TokenContract:
         return self.token.functions.balance(address).call()
 
 
-
