@@ -14,7 +14,6 @@ def hello_world():
 
 @app.route('/new_order', methods=['POST', 'GET'])
 def new_order():
-    contract_manager = tokencontract.TokenManager()
     data = request.json
     print(data['buyer'], data['seller'], data['service'], end=" ")
     order_id = ordermanager.insert_order(int(data['buyer']), int(data['seller']), int(data['service']))
@@ -28,7 +27,7 @@ def new_order():
 
     contract_address = order_contract_manager.deploy(buyer_address, seller_address, "0x2Cd8938a50AC96d4e8967f83905Bb94902073AB1", data['price'])
     ordermanager.add_contract_address(contract_address, order_id)
-    contract_manager.approve(buyer_address, contract_address, data['price'])
+    tokencontract.approve(buyer_address, contract_address, data['price'])
 
     order_contract_manager.freezeTokens(buyer_address , contract_address)
     return "ok"
