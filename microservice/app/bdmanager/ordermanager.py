@@ -5,7 +5,7 @@ def insert_order(buyer, seller, service):
     order = Order(buyer,
                   seller,
                   service,
-                  0)
+                  1)
     try:
         psqldb.session.add(order)
     except:
@@ -60,9 +60,14 @@ def get_contract_address(order_id):
     return res.contract_adress
 
 
-def get_data_to_confirm(order_id, sender):
+def get_data_to_confirm_recieved(order_id):
     res = Order.query.filter_by(id=order_id).first()
-    return res.order_state, res[sender], res.contract_adress
+    return res.order_state, res.buyer, res.contract_adress
+
+def get_data_to_confirm_supplied(order_id):
+    res = Order.query.filter_by(id=order_id).first()
+    print(res.order_state, res.contract_adress, res.id, res.seller, res.buyer, res.service, res.order_date, end=',')
+    return res.order_state, res.seller, res.contract_adress
 
 
 def set_order_state(order_id, new_state):

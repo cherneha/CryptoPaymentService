@@ -8,8 +8,8 @@ app = Flask(__name__)
 
 app.config.from_object(Config)
 app.config.update({'ETHEREUM_PROVIDER': 'http',
-                   'ETHEREUM_ENDPOINT_URI': 'https://rinkeby.infura.io/v3/00bd814d42c342c0a78fcf6266b269c5',
-                   'INFURA_API_KEY' : '00bd814d42c342c0a78fcf6266b269c5'})
+                   'ETHEREUM_ENDPOINT_URI': 'https://rinkeby.infura.io/v3/a5c86abf0dd042eda7954f284e278501',
+                   'INFURA_API_KEY' : 'a5c86abf0dd042eda7954f284e278501'})
 psqldb = SQLAlchemy(app)
 wb3 = FlaskWeb3(app=app)
 

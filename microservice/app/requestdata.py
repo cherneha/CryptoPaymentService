@@ -1,7 +1,7 @@
 import requests
 
 def get_user_address(user_id):
-    r = requests.get("http://35.244.240.101/profiles/get", params={"id": user_id})
+    r = requests.get("http://35.244.240.101/profiles/get", params={"id": 1})
     res_json = r.json()
     user_address = res_json['walletAddress']
     return user_address
