@@ -59,3 +59,17 @@ def get_contract_address(order_id):
     res = Order.query.filter_by(id=order_id).first()
     return res.contract_adress
 
+
+def get_order_state(order_id):
+    res = Order.query.filter_by(id=order_id).first()
+    return res.order_state
+
+def set_order_state(order_id, new_state):
+    res = Order.query.filter_by(id=order_id).first()
+    res.order_state = new_state
+    try:
+        psqldb.session.commit()
+    except Exception as e:
+        print(e)
+        print("Error while commiting to DB.")
+

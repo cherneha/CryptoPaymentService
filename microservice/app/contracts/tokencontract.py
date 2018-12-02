@@ -27,15 +27,18 @@ class TokenManager:
         tx = self.token.functions.approve(spender=spender, tokens=value).buildTransaction(
         {
             'from': sender,
-            'gas': 6100000,
+            'gas': 1100000,
             'value': 0,
-            'gasPrice': current_web3.eth.gasPrice * 20,  # Get Gas Price
+            'gasPrice': current_web3.eth.gasPrice * 30,  # Get Gas Price
             'nonce': current_web3.eth.getTransactionCount(sender)
         })
 
         signed = current_web3.eth.account.signTransaction(tx,
                                                           'd0eaed9b1a4633b358208793a96aba7fd42547472682a2e6fe73cf3ababef3fc')
         tx_hash = current_web3.eth.sendRawTransaction(signed.rawTransaction)
+        print ("approve spending")
         print(tx_hash.hex())
         tx_reciept = current_web3.eth.waitForTransactionReceipt(tx_hash)
         print(tx_reciept)
+
+
