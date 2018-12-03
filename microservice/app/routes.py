@@ -11,6 +11,14 @@ order_contract_manager = ordercontract.OrderManager()
 def hello_world():
     return "ok"
 
+@app.route('/health')
+def test_health():
+    return jsonify(success=True)
+
+@app.route('/liveness')
+def test_liveness():
+    return jsonify(success=True)
+
 @app.route('/new_order', methods=['POST', 'GET'])
 def new_order():
     token_contract = tokencontract.TokenContract()
