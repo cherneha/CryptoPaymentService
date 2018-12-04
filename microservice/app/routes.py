@@ -1,5 +1,5 @@
 from flask import jsonify, request
-from app import app
+from app import app, psqldb
 from app.bdmanager import ordermanager
 from app.contracts import tokencontract, ordercontract
 from app import requestdata as req
@@ -9,6 +9,11 @@ order_contract_manager = ordercontract.OrderManager()
 
 @app.route('/')
 def hello_world():
+    return "ok"
+
+@app.route('/create_db_tables')
+def create_db_tables():
+    psqldb.create_all()
     return "ok"
 
 @app.route('/health')
@@ -23,22 +28,21 @@ def test_liveness():
 def new_order():
     token_contract = tokencontract.TokenContract()
     data = request.json
-    print(int(data['buyer']), int(data['seller']), int(data['service']), end=" ")
-    order_id = ordermanager.insert_order(int(data['buyer']), int(data['seller']), int(data['service']))
+    order_id = ordermanager.insert_order(str(data['buyer']), str(data['seller']), int(data['service']))
 
-    buyer_address = req.get_user_address(data['buyer'])
-    seller_address = req.get_user_address(data['seller'])
+    buyer_address = req.get_user_address(str(data['buyer']))
+    seller_address = req.get_user_address(str(data['seller']))
     buyer_key = str(data['buyer_key'])
     print(buyer_address, seller_address)
 
     contract_address = order_contract_manager.deploy(current_web3.toChecksumAddress(buyer_address),
                                                      current_web3.toChecksumAddress(seller_address),
                                                      current_web3.toChecksumAddress("0x8a5587F2A4B130eCf7A3c3bc1578cd6C88a51cf2"),
-                                                     data['price'], buyer_key)
+                                                     int(data['price']), buyer_key)
     ordermanager.add_contract_address(contract_address, order_id)
     token_contract.approve(current_web3.toChecksumAddress(buyer_address),
                           current_web3.toChecksumAddress(contract_address),
-                          data['price'], buyer_key)
+                          int(data['price']), buyer_key)
 
     order_contract_manager.freezeTokens(current_web3.toChecksumAddress(buyer_address) ,
                                         current_web3.toChecksumAddress(contract_address),
@@ -47,13 +51,13 @@ def new_order():
 
 @app.route('/get_buyer_orders/<id>', methods=['GET'])
 def get_buyer_orders(id):
-    orders = ordermanager.get_buyer_orders(int(id))
+    orders = ordermanager.get_buyer_orders(str(id))
     return jsonify(orders)
 
 
 @app.route('/get_seller_orders/', methods=['GET'])
 def get_seller_orders():
-    seller_id = int(request.args.get('seller_id'))
+    seller_id = str(request.args.get('seller_id'))
     service_id = int(request.args.get('service_id'))
     orders = ordermanager.get_seller_orders(seller_id, service_id)
     return jsonify(orders)
@@ -96,7 +100,8 @@ def confirm_recieved():
 @app.route('/balance', methods=['GET'])
 def balance():
     token_contract = tokencontract.TokenContract()
-    id = request.args.get('id')
+    id = str(request.args.get('id'))
     address = req.get_user_address(id)
-    milo_balance = token_contract.balance(address)
+    print(address)
+    milo_balance = token_contract.balance(current_web3.toChecksumAddress(address))
     return str(milo_balance)
